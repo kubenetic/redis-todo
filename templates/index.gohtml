@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>TODO</title>
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            width: 100%;
+            text-align: center;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            margin-left: 10px;
+        }
+
+        input[type=submit] {
+            margin: 5px;
+        }
+
+        div {
+            margin: 10px;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .inline {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>TODO App</h1>
+</header>
+
+<main>
+    <div>
+        <span class="error">{{ .Error }}</span>
+        <form action="/add" method="post">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name">
+
+            <label for="description">Description</label>
+            <input type="text" id="description" name="description">
+
+            <input type="submit" value="Create">
+        </form>
+    </div>
+
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ range .Todos }}
+                <tr>
+                    <td>{{ .Name }}</td>
+                    <td>{{ .Description }}</td>
+                    <td>{{ if .Done }}Done{{ else }}In progress{{ end }}</td>
+                    <td class="inline">
+                        {{ if not .Done }}
+                        <form action="/done" method="post">
+                            <input type="hidden" name="ID" value="{{ .ID }}">
+                            <input type="submit" value="Done">
+                        </form>
+                        {{ end }}
+
+                        <form action="/del" method="post">
+                            <input type="hidden" name="ID" value="{{ .ID }}">
+                            <input type="submit" value="Delete">
+                        </form>
+                    </td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </div>
+</main>
+
+</body>
+</html>
